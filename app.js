@@ -58,41 +58,50 @@ function eliminar(id){
     });
 }
 
-//editar documentos
-function editar(id,nombre,apellido,fecha){
-
+// editar documentos
+function editar(id, nombre, apellido, fecha) {
     document.getElementById('nombre').value = nombre;
     document.getElementById('apellido').value = apellido;
     document.getElementById('fecha').value = fecha;
     var boton = document.getElementById('boton');
     boton.innerHTML = 'Editar';
 
-    boton.onclick = function(){
-        var washingtonRef = db.collection("users").doc(id);
-        // Set the "capital" field of the city 'DC'
+    // Cambia el evento de clic para llamar a la función editarUsuario
+    boton.onclick = function () {
+        editarUsuario(id);
+    };
+}
 
-        var nombre = document.getElementById('nombre').value;
-        var apellido = document.getElementById('apellido').value;
-        var fecha = document.getElementById('fecha').value;
+// Función para manejar la edición de un usuario
+function editarUsuario(id) {
+    var washingtonRef = db.collection("users").doc(id);
 
-        return washingtonRef.update({
-            first: nombre,
-            last: apellido,
-            born: fecha
-        })
-        .then(function() {
-            console.log("Document successfully updated!");
+    var nombre = document.getElementById('nombre').value;
+    var apellido = document.getElementById('apellido').value;
+    var fecha = document.getElementById('fecha').value;
+
+    return washingtonRef.update({
+        first: nombre,
+        last: apellido,
+        born: fecha
+    })
+        .then(function () {
+            console.log("Documento actualizado exitosamente");
+            // Restablece el texto del botón y los campos de entrada
             boton.innerHTML = 'Guardar';
             document.getElementById('nombre').value = '';
             document.getElementById('apellido').value = '';
             document.getElementById('fecha').value = '';
+
+            // Restablece la función original de guardar para el evento de clic
+            boton.onclick = guardar;
         })
-        .catch(function(error) {
-            // The document probably doesn't exist.
-            console.error("Error updating document: ", error);
+        .catch(function (error) {
+            // El documento probablemente no existe.
+            console.error("Error al actualizar el documento: ", error);
         });
-    }
 }
+
 
 
 
